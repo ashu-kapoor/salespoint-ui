@@ -1,3 +1,19 @@
+html {
+  height: 100%;
+  background-color: #a3a5b2;
+}
+body {
+  display: flex;
+  height: 95%;
+  margin: 1.2rem;
+}
+
+#root {
+  display: flex;
+  background-color: #edeef2;
+  flex-grow: 1;
+  border-radius: 0.5rem;
+}
 .App {
   text-align: center;
 }
