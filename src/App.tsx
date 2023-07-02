@@ -11,7 +11,7 @@ import { OrdersPage } from "./pages/OrdersPage";
 function App() {
   const routes = useRoutes([
     { path: "/", element: <LoginPage /> },
-    { path: "/inventory", element: <InventoryPage /> },
+    { path: "/inventory/*", element: <InventoryPage /> },
     { path: "/contacts", element: <ContactPage /> },
     { path: "/orders", element: <OrdersPage /> },
     { path: "*", element: <Navigate to="/" replace /> },

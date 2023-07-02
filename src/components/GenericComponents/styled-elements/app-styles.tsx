@@ -18,6 +18,10 @@ export const ContainerHeader = styled.div`
   line-height: 1.334;
   letter-spacing: 0em;
   color: rgb(30 41 128);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const Divider = styled.hr<{ isThick: boolean }>`

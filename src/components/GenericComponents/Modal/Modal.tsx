@@ -1,7 +1,6 @@
 import ReactDOM from "react-dom";
 import classes from "./Modal.module.css";
 import { ModalProperties } from "../Types";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 function Backdrop(props: ModalProperties) {
   return <div className={classes.backdrop} onClick={props.onClose} />;
@@ -31,5 +30,3 @@ export function Modal(props: ModalProperties) {
     </>
   );
 }
-
-export default Modal;

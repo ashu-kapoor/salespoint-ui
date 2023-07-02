@@ -62,21 +62,23 @@ const testData = [
 
 export function InventoryContainer(props: PageContainerProperties) {
   return (
-    <DataContainer>
-      <ContainerHeader>
-        {props.headerName}
-        <AddInventoryForm metaData={props.metadata} />
-      </ContainerHeader>
-      <Divider isThick={true} />
-      <SearchForm metaData={props.metadata}></SearchForm>
-      <Divider isThick={true} />
-      <Table
-        headers={testHeaders}
-        data={testData}
-        margin={"1rem"}
-        metadata={props.metadata}
-        headerName={props.headerName}
-      />
-    </DataContainer>
+    <>
+      <DataContainer>
+        <ContainerHeader>
+          {props.headerName}
+          <AddInventoryForm metaData={props.metadata} />
+        </ContainerHeader>
+        <Divider isThick={true} />
+        <SearchForm metaData={props.metadata}></SearchForm>
+        <Divider isThick={true} />
+        <Table
+          headers={testHeaders}
+          data={testData}
+          margin={"1rem"}
+          metadata={props.metadata}
+          headerName={props.headerName}
+        />
+      </DataContainer>
+    </>
   );
 }

@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const FlexCenterDiv = styled.div`
   display: flex;
   align-items: center;
+  margin-right: 2rem;
 `;
 
 export const Button = styled.button<{ enabled: boolean }>`

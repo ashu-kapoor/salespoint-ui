@@ -1,15 +1,18 @@
-import { Form } from "react-router-dom";
 import { FormContextProvider, useForms } from "../../contexts/FormContext";
 import { FormInput } from "../GenericComponents/FormInput";
 import { SearchBarInput } from "../GenericComponents/Types";
-import { DataContainer } from "../GenericComponents/styled-elements/app-styles";
+import {
+  ContainerHeader,
+  DataContainer,
+} from "../GenericComponents/styled-elements/app-styles";
 import {
   FormRow,
   FlexCenterDiv,
   Button,
+  Form,
 } from "../GenericComponents/styled-elements/forms-styles";
 import { useState } from "react";
-import Modal from "../GenericComponents/Modal/Modal";
+import { Modal } from "../GenericComponents/Modal/Modal";
 
 export default function AddInventoryForm(props: SearchBarInput) {
   const [isVisible, setIsVisible] = useState(false);
@@ -30,25 +33,27 @@ export default function AddInventoryForm(props: SearchBarInput) {
     <>
       {isVisible && (
         <Modal onClose={onClose}>
+          <ContainerHeader>Add Inventory</ContainerHeader>
           <FormContextProvider>
             <AddInventoryFormWithoutState metaData={props.metaData} />
           </FormContextProvider>
         </Modal>
       )}
       {!isVisible && (
-        <form action="/inventory" onSubmit={() => alert("test")}>
-          <Button
-            enabled={true}
-            type="button"
-            onMouseUp={(event) => {
-              event.stopPropagation();
-              event.preventDefault();
-              onClick(event);
-            }}
-          >
-            Add
-          </Button>
-        </form>
+        //<form action="/inventory" onSubmit={() => alert("test")}>
+        <Button
+          enabled={true}
+          type="button"
+          onMouseUp={(event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            onClick(event);
+          }}
+          style={{ marginTop: "0px" }}
+        >
+          Add
+        </Button>
+        //</form>
       )}
     </>
   );
