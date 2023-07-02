@@ -7,8 +7,8 @@ import {
   Form,
   FormRow,
 } from "./styled-elements/forms-styles";
-import { SearchBarInput } from "./types";
-import { FormContextProvider, useForms } from "../contexts/FormContext";
+import { SearchBarInput } from "./Types";
+import { FormContextProvider, useForms } from "../../contexts/FormContext";
 import { ValueFilterTwo } from "./ValueFilter";
 
 export default function SearchForm(props: SearchBarInput) {
@@ -77,6 +77,7 @@ function SearchFormWithoutState(props: SearchBarInput) {
                       ...metadata,
                       label: `Search ${metadata.label}`,
                     }}
+                    data={{ [metadata.datKeyName]: "" }}
                   />
                 );
               } else {

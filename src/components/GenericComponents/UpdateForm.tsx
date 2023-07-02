@@ -6,8 +6,8 @@ import {
   Form,
   FormRow,
 } from "./styled-elements/forms-styles";
-import { UpdateFormProps } from "./types";
-import { FormContextProvider, useForms } from "../contexts/FormContext";
+import { UpdateFormProps } from "./Types";
+import { FormContextProvider, useForms } from "../../contexts/FormContext";
 
 export default function UpdateForm(props: UpdateFormProps) {
   return (

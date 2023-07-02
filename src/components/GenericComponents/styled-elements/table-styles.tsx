@@ -41,3 +41,13 @@ export const DataColumn = styled.div<{ width: string | undefined }>`
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-weight: 300;
 `;
+
+export const StyledTable = styled.div<{ width?: string; margin?: string }>`
+  display: flex;
+  margin: 1rem;
+  flex-direction: column;
+  ${({ width }) => width && `width:${width};`};
+  ${({ margin }) => margin && `margin-left:${margin};`}
+  ${({ margin }) => margin && `margin-right:${margin};`}
+  overflow-y: scroll;
+`;

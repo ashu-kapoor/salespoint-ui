@@ -1,3 +1,6 @@
+import { EventHandler, MouseEventHandler, ReactNode } from "react";
+import { JsxElement } from "typescript";
+
 export interface UpdateFormData {
   [key: string]: string | number;
 }
@@ -33,4 +36,33 @@ export interface InputState {
 
 export interface SearchBarInput {
   metaData?: UpdateFormMetadata[];
+}
+
+export interface PageContainerProperties {
+  headerName: string;
+  metadata: UpdateFormMetadata[];
+}
+
+export interface TableProperties extends PageContainerProperties {
+  headers: {
+    header: string;
+    width?: string;
+    fieldName: string;
+    renderMethod?: RenderFunction;
+  }[];
+  data: TableData[];
+  width?: string;
+  margin?: string;
+}
+
+export type RenderFunction = (data: number) => JsxElement;
+
+export interface TableData {
+  [key: string]: any;
+}
+
+export interface ModalProperties {
+  children?: ReactNode;
+  onClose?: MouseEventHandler;
+  onClick?: MouseEventHandler;
 }

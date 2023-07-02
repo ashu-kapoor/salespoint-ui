@@ -3,10 +3,10 @@ import React from "react";
 import "./App.css";
 
 import { Navigate, useRoutes } from "react-router-dom";
-import { InventoryPage } from "./containers/InventoryPage";
-import { LoginPage } from "./containers/LoginPage";
-import { ContactPage } from "./containers/ContactPage";
-import { OrdersPage } from "./containers/OrdersPage";
+import { InventoryPage } from "./pages/InventoryPage";
+import { LoginPage } from "./pages/LoginPage";
+import { ContactPage } from "./pages/ContactPage";
+import { OrdersPage } from "./pages/OrdersPage";
 
 function App() {
   const routes = useRoutes([

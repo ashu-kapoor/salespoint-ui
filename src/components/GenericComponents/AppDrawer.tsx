@@ -8,7 +8,7 @@ import {
   DrawerParent,
   DrawerToggler,
   ToggleIcon,
-} from "../components/styled-elements/drawer-styles";
+} from "./styled-elements/drawer-styles";
 
 const headerProps = {
   title: "My Dive Log",
