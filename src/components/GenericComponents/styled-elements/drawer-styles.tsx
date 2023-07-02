@@ -35,7 +35,7 @@ export const DrawerMenuList = styled.ul`
   position: relative;
 `;
 
-export const DrawerListItem = styled.li`
+export const DrawerListItem = styled.li<{ isSelected: boolean }>`
   position: relative;
   text-decoration: none;
   width: 100%;
@@ -48,6 +48,8 @@ export const DrawerListItem = styled.li`
   &:hover {
     background-color: #778899;
   }
+
+  ${({ isSelected }) => isSelected && "background-color: #778899;"};
 `;
 
 export const DrawerItemWrapper = styled.div`
