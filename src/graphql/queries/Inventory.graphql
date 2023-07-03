@@ -1,0 +1,17 @@
+query GET_INVENTORIES {
+  inventories {
+    id
+    quantity
+    productName
+    price
+  }
+}
+
+query SearchInventory($inventoryInput: SearchInventoryInput!) {
+  searchInventory(input: $inventoryInput) {
+    id
+    quantity
+    productName
+    price
+  }
+}

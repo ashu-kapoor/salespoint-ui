@@ -1,4 +1,5 @@
-import { MouseEventHandler, ReactNode } from "react";
+import { ApolloError } from "@apollo/client";
+import { FormEventHandler, MouseEventHandler, ReactNode } from "react";
 import { JsxElement } from "typescript";
 
 export interface UpdateFormData {
@@ -36,11 +37,18 @@ export interface InputState {
 
 export interface SearchBarInput {
   metaData?: UpdateFormMetadata[];
+  onSearch?: FormEventHandler<HTMLFormElement>;
 }
 
 export interface PageContainerProperties {
   headerName: string;
   metadata: UpdateFormMetadata[];
+}
+
+export interface InventoryContainerChildProperties
+  extends PageContainerProperties {
+  error: ApolloError | undefined;
+  tableData: TableData[];
 }
 
 export interface TableProperties extends PageContainerProperties {

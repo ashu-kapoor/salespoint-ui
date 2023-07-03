@@ -14,7 +14,10 @@ import { ValueFilterTwo } from "./ValueFilter";
 export default function SearchForm(props: SearchBarInput) {
   return (
     <FormContextProvider>
-      <SearchFormWithoutState metaData={props.metaData} />
+      <SearchFormWithoutState
+        metaData={props.metaData}
+        onSearch={props.onSearch}
+      />
     </FormContextProvider>
   );
 }
@@ -53,7 +56,7 @@ function SearchFormWithoutState(props: SearchBarInput) {
 
   return (
     <DataContainer style={{ justifyContent: "center", maxHeight: "9rem" }}>
-      <Form>
+      <Form onSubmit={props.onSearch}>
         <FormRow className="formRow">
           {props?.metaData
             ?.filter((metadata) => metadata.slider)
@@ -88,6 +91,7 @@ function SearchFormWithoutState(props: SearchBarInput) {
             <Button
               disabled={!formState.formValid}
               enabled={formState.formValid}
+              type="submit"
             >
               Search
             </Button>

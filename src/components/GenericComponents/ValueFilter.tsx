@@ -15,9 +15,11 @@ import {
 export function ValueFilterTwo(props: FormInputProps) {
   const { metadata } = props;
   const [inBetween, setInBetween] = useState(false);
+  const [value, setValue] = useState("default");
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     event.target.value === "between" ? setInBetween(true) : setInBetween(false);
+    setValue(event.target.value);
   };
 
   return (
@@ -30,13 +32,13 @@ export function ValueFilterTwo(props: FormInputProps) {
         <InputWrapper>
           <Select
             name={`${metadata.label}-select`}
-            id={`${metadata.label}-select`}
+            id={`${metadata.datKeyName}-select`}
             onChange={(event) => handleSelectChange(event)}
+            value={value}
           >
             <option value="default"></option>
-            <option value="<=">Less Than Equal To</option>
-            <option value=">=">Greater Than Equal To</option>
-            <option value=":=">Equal To</option>
+            <option value="<">Less Than</option>
+            <option value=">">Greater Than</option>
             <option value="between">In Between</option>
           </Select>
           <InputFieldSet hidden={true}>
