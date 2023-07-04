@@ -1,6 +1,9 @@
-import { ApolloError } from "@apollo/client";
 import { FormEventHandler, MouseEventHandler, ReactNode } from "react";
 import { JsxElement } from "typescript";
+import {
+  SearchCustomerInput,
+  SearchInventoryInput,
+} from "../../generated/graphql";
 
 export interface UpdateFormData {
   [key: string]: string | number;
@@ -45,10 +48,13 @@ export interface PageContainerProperties {
   metadata: UpdateFormMetadata[];
 }
 
-export interface InventoryContainerChildProperties
-  extends PageContainerProperties {
-  error: ApolloError | undefined;
-  tableData: TableData[];
+export interface TableHOFProperties extends PageContainerProperties {
+  searchInput: SearchInventoryInput | SearchCustomerInput | SearchCustomerInput;
+}
+
+// required non-null key prop
+export interface WithKeyProps {
+  key: React.Key;
 }
 
 export interface TableProperties extends PageContainerProperties {

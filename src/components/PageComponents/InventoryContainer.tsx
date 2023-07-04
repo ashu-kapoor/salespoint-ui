@@ -1,14 +1,14 @@
+import { useState } from "react";
 import {
-  Get_InventoriesDocument,
   SearchInventoryDocument,
   SearchInventoryInput,
 } from "../../generated/graphql";
 import SearchForm from "../GenericComponents/SearchForm";
 import { Table } from "../GenericComponents/Table";
 import {
-  InventoryContainerChildProperties,
   PageContainerProperties,
   TableData,
+  TableHOFProperties,
 } from "../GenericComponents/Types";
 import {
   DataContainer,
@@ -16,7 +16,7 @@ import {
   Divider,
 } from "../GenericComponents/styled-elements/app-styles";
 import AddInventoryForm from "./AddInventoryForm";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 const testHeaders = [
   { header: "ID", fieldName: "id", width: "20rem" },
@@ -71,53 +71,11 @@ const testData = [
 ];
 
 export function InventoryContainer(props: PageContainerProperties) {
-  const { loading, error, data } = useQuery(Get_InventoriesDocument);
-
-  if (loading) return <>"Loding"</>;
-
-  let tableData: TableData[] = [];
-
-  data?.inventories?.forEach((item) => {
-    tableData.push({
-      id: item.id,
-      productName: item.productName,
-      price: item.price,
-      quantity: item.quantity,
-      status: item.quantity < 10 ? "red" : "green",
-    });
-  });
-
-  return (
-    <InventoryContainerChild
-      headerName={props.headerName}
-      metadata={props.metadata}
-      error={error}
-      tableData={tableData}
-    />
-  );
-}
-
-function InventoryContainerChild(props: InventoryContainerChildProperties) {
-  let { error, tableData } = props;
-  let [searchInventory, object] = useLazyQuery(SearchInventoryDocument);
-
-  if (object.data) {
-    tableData = [];
-    object.data?.searchInventory?.forEach((item) => {
-      tableData.push({
-        id: item.id,
-        productName: item.productName,
-        price: item.price,
-        quantity: item.quantity,
-        status: item.quantity < 10 ? "red" : "green",
-      });
-    });
-  } else if (object.error) {
-    tableData = [];
-  }
+  let [inventoryInput, setInventoryInput] = useState<SearchInventoryInput>({});
 
   function inventorySearchHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    let searchInventoryInput: SearchInventoryInput = {};
     const elements = Array.from(event.currentTarget.elements).filter(
       (element) => element.id
     );
@@ -168,8 +126,6 @@ function InventoryContainerChild(props: InventoryContainerChildProperties) {
         }
       });
 
-    let searchInventoryInput: SearchInventoryInput = {};
-
     if (searchTerm) {
       searchInventoryInput.fields = freeTextFields;
       searchInventoryInput.searchTerm = searchTerm;
@@ -179,6 +135,8 @@ function InventoryContainerChild(props: InventoryContainerChildProperties) {
       searchInventoryInput.filter = filter;
     }
 
+    setInventoryInput(searchInventoryInput);
+
     /*
       productName-search
 quantity-select
@@ -187,7 +145,7 @@ price-select
 price-input-min
       */
 
-    searchInventory({ variables: { inventoryInput: searchInventoryInput } });
+    //searchInventory({ variables: { inventoryInput: searchInventoryInput } });
   }
 
   return (
@@ -202,17 +160,43 @@ price-input-min
         onSearch={inventorySearchHandler}
       ></SearchForm>
       <Divider isThick={true} />
-      {(error || object.error) && <div>No Data Found</div>}
-      {tableData && tableData.length > 0 && (
-        <Table
-          headers={testHeaders}
-          //data={testData} Uncomment for local testing
-          data={tableData}
-          margin={"1rem"}
-          metadata={props.metadata}
-          headerName={props.headerName}
-        />
-      )}
+      <InventoryTable
+        searchInput={inventoryInput}
+        metadata={props.metadata}
+        headerName={props.headerName}
+      />
     </DataContainer>
+  );
+}
+
+function InventoryTable(props: TableHOFProperties) {
+  const { loading, error, data } = useQuery(SearchInventoryDocument, {
+    variables: { inventoryInput: props.searchInput },
+  });
+
+  if (loading) return <>"Loding"</>;
+  if (error) return <>"Error"</>;
+  let tableData: TableData[] = [];
+
+  data?.searchInventory?.forEach((item) => {
+    tableData.push({
+      id: item.id,
+      productName: item.productName,
+      price: item.price,
+      quantity: item.quantity,
+      status: item.quantity < 10 ? "red" : "green",
+    });
+  });
+
+  return (
+    <Table
+      //key={props.key}
+      headers={testHeaders}
+      //data={testData} Uncomment for local testing
+      data={tableData}
+      margin={"1rem"}
+      metadata={props.metadata}
+      headerName={props.headerName}
+    />
   );
 }
