@@ -17,6 +17,7 @@ import {
 } from "../GenericComponents/styled-elements/app-styles";
 import AddInventoryForm from "./AddInventoryForm";
 import { useQuery } from "@apollo/client";
+import UpdateForm from "../GenericComponents/UpdateForm";
 
 const testHeaders = [
   { header: "ID", fieldName: "id", width: "20rem" },
@@ -176,6 +177,7 @@ function InventoryTable(props: TableHOFProperties) {
 
   if (loading) return <>"Loding"</>;
   if (error) return <>"Error"</>;
+
   let tableData: TableData[] = [];
 
   data?.searchInventory?.forEach((item) => {
@@ -197,6 +199,8 @@ function InventoryTable(props: TableHOFProperties) {
       margin={"1rem"}
       metadata={props.metadata}
       headerName={props.headerName}
-    />
+    >
+      <UpdateForm />
+    </Table>
   );
 }

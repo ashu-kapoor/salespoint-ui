@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, ReactElement, useState } from "react";
 import { CheckBox } from "./styled-elements/app-styles";
 import {
   DataColumn,
@@ -6,10 +6,12 @@ import {
   StyledTable,
   TableHeaderRow,
 } from "./styled-elements/table-styles";
-import UpdateForm from "./UpdateForm";
-import { TableProperties } from "./Types";
+import { TableProperties, UpdateFormProps } from "./Types";
+import React from "react";
 
-export function Table(tableProps: TableProperties) {
+export function Table(
+  tableProps: TableProperties & { children: ReactElement<UpdateFormProps> }
+) {
   const [selected, setSelected] = useState<readonly string[]>([]);
 
   const handleClick = (event: React.MouseEvent<unknown>, dataId: string) => {
@@ -71,13 +73,13 @@ export function Table(tableProps: TableProperties) {
               })}
             </TableHeaderRow>
 
-            {selected?.indexOf(data.id) > -1 && tableProps.metadata && (
-              <UpdateForm
-                key={`${data.id}-updateForm`}
-                data={data}
-                metadata={tableProps.metadata}
-              />
-            )}
+            {selected?.indexOf(data.id) > -1 &&
+              tableProps.metadata &&
+              React.cloneElement(tableProps.children, {
+                key: `${data.id}-updateForm`,
+                data,
+                metadata: tableProps.metadata,
+              })}
           </Fragment>
         );
       })}

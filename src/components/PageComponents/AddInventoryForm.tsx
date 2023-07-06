@@ -1,92 +1,98 @@
-import { FormContextProvider, useForms } from "../../contexts/FormContext";
-import { FormInput } from "../GenericComponents/FormInput";
-import { SearchBarInput } from "../GenericComponents/Types";
+import { AddFormInput } from "../GenericComponents/Types";
+import { FormEvent, MouseEvent, useState } from "react";
+import { useMutation } from "@apollo/client";
 import {
-  ContainerHeader,
-  DataContainer,
-} from "../GenericComponents/styled-elements/app-styles";
-import {
-  FormRow,
-  FlexCenterDiv,
-  Button,
-  Form,
-} from "../GenericComponents/styled-elements/forms-styles";
-import { useState } from "react";
-import { Modal } from "../GenericComponents/Modal/Modal";
+  AddInventoryDocument,
+  AddInventoryInput,
+} from "../../generated/graphql";
+import { AddFormWithContext } from "../GenericComponents/AddFormWithContext";
 
-export default function AddInventoryForm(props: SearchBarInput) {
+export default function AddInventoryForm(props: AddFormInput) {
   const [isVisible, setIsVisible] = useState(false);
+  const [addInventory, { loading, error, data }] =
+    useMutation(AddInventoryDocument);
 
-  const onClose = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.stopPropagation();
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-    setIsVisible(false);
-  };
 
-  const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const addInventoryInput: AddInventoryInput = {
+      price: Number(
+        (
+          event.currentTarget.elements.namedItem(
+            "price-input"
+          ) as HTMLInputElement
+        ).value
+      ),
+      productName: (
+        event.currentTarget.elements.namedItem(
+          "productName-input"
+        ) as HTMLInputElement
+      ).value,
+      quantity: Number(
+        (
+          event.currentTarget.elements.namedItem(
+            "quantity-input"
+          ) as HTMLInputElement
+        ).value
+      ),
+    };
+
+    addInventory({ variables: { addInventoryInput } });
+  }
+
+  function handleFormOpen(event: MouseEvent<HTMLButtonElement, MouseEvent>) {
     event.stopPropagation();
     event.preventDefault();
     setIsVisible(true);
-  };
+  }
+
+  function handleFormClose(event: MouseEvent<HTMLButtonElement, MouseEvent>) {
+    event.preventDefault();
+    setIsVisible(false);
+  }
 
   return (
-    <>
-      {isVisible && (
-        <Modal onClose={onClose}>
-          <ContainerHeader>Add Inventory</ContainerHeader>
-          <FormContextProvider>
-            <AddInventoryFormWithoutState metaData={props.metaData} />
-          </FormContextProvider>
-        </Modal>
-      )}
-      {!isVisible && (
-        //<form action="/inventory" onSubmit={() => alert("test")}>
-        <Button
-          enabled={true}
-          type="button"
-          onMouseUp={(event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            onClick(event);
-          }}
-          style={{ marginTop: "0px" }}
-        >
-          Add
-        </Button>
-        //</form>
-      )}
-    </>
+    <AddFormWithContext
+      header={"Add Inventory"}
+      isVisible={isVisible}
+      loading={loading}
+      onModalOpenClick={handleFormOpen}
+      onModalClose={handleFormClose}
+      dataPresent={data ? true : false}
+      metaData={props.metaData}
+      onSubmit={handleSubmit}
+      error={error}
+    />
   );
-}
 
-function AddInventoryFormWithoutState(props: SearchBarInput) {
-  const formState = useForms();
-  return (
-    <DataContainer>
-      <Form>
-        <FormRow className="formRow">
-          {props.metaData
-            ?.filter((metadata) => metadata.datKeyName.toLowerCase() !== "id")
-            .map((metadata) => {
-              return (
-                <FormInput
-                  id={`${metadata.datKeyName}-input`}
-                  key={`${metadata.datKeyName}-input`}
-                  metadata={metadata}
-                  data={{ [metadata.datKeyName]: "" }}
-                />
-              );
-            })}
-          <FlexCenterDiv>
-            <Button
-              disabled={!formState.formValid}
-              enabled={formState.formValid}
-            >
-              Submit
-            </Button>
-          </FlexCenterDiv>
-        </FormRow>
-      </Form>
-    </DataContainer>
-  );
+  /* if (!isVisible) {
+    return (
+      <Button
+        enabled={true}
+        type="button"
+        onClick={onClick}
+        style={{ marginTop: "0px" }}
+      >
+        Add
+      </Button>
+    );
+  } else {
+    return (
+      <Modal onClose={onClose}>
+        <ContainerHeader>Add Inventory</ContainerHeader>
+
+        <FormContextProvider>
+          <AddFormWithoutContext
+            onSubmit={handleSubmit}
+            metaData={props.metaData}
+          />
+        </FormContextProvider>
+        {error && <div>Error</div>}
+        {loading && <div>Loading</div>}
+        {data && (
+          <div>Saved. Click outisde form to exit or continue adding</div>
+        )}
+      </Modal>
+    );
+  }*/
 }

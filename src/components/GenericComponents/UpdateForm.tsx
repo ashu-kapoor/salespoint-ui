@@ -23,7 +23,7 @@ function UpdateFormWithoutState(props: UpdateFormProps) {
     <DataContainer>
       <Form>
         <FormRow className="formRow">
-          {props.metadata.map((metadata) => {
+          {props.metadata?.map((metadata) => {
             return (
               <FormInput
                 id={`${metadata.datKeyName}-input`}

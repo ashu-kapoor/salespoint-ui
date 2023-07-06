@@ -4,6 +4,7 @@ import {
   SearchCustomerInput,
   SearchInventoryInput,
 } from "../../generated/graphql";
+import { ApolloError } from "@apollo/client";
 
 export interface UpdateFormData {
   [key: string]: string | number;
@@ -29,8 +30,8 @@ export interface FormInputProps {
 }
 
 export interface UpdateFormProps {
-  data: UpdateFormData;
-  metadata: UpdateFormMetadata[];
+  data?: UpdateFormData;
+  metadata?: UpdateFormMetadata[];
 }
 
 export interface InputState {
@@ -41,6 +42,23 @@ export interface InputState {
 export interface SearchBarInput {
   metaData?: UpdateFormMetadata[];
   onSearch?: FormEventHandler<HTMLFormElement>;
+  onSubmit?: FormEventHandler<HTMLFormElement>;
+  header?: string;
+}
+
+export interface AddFormInput {
+  metaData: UpdateFormMetadata[];
+  onSubmit?: FormEventHandler<HTMLFormElement>;
+}
+
+export interface AddFormInputWithContext extends AddFormInput {
+  header: string;
+  isVisible: boolean;
+  loading: boolean;
+  error?: ApolloError;
+  onModalOpenClick: (event: any) => void;
+  onModalClose: (event: any) => void;
+  dataPresent: boolean;
 }
 
 export interface PageContainerProperties {
