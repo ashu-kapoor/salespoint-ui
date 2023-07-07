@@ -24,3 +24,15 @@ mutation AddInventory($addInventoryInput: AddInventoryInput!) {
     price
   }
 }
+
+mutation UpdateInventory(
+  $updateInventoryId: ID!
+  $updateInventoryInput: AddInventoryInput!
+) {
+  updateInventory(id: $updateInventoryId, request: $updateInventoryInput) {
+    id
+    quantity
+    productName
+    price
+  }
+}

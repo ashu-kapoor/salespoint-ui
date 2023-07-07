@@ -6,6 +6,7 @@ import {
   StyledTable,
   TableHeaderRow,
 } from "./styled-elements/table-styles";
+import UpdateForm from "./UpdateForm";
 import { TableProperties, UpdateFormProps } from "./Types";
 import React from "react";
 

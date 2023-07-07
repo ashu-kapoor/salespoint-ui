@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { FormContextProvider } from "../../contexts/FormContext";
 import { AddFormWithoutContext } from "./AddFormWithoutContext";
 import { Modal } from "./Modal/Modal";
@@ -15,6 +16,15 @@ export function AddFormWithContext(props: AddFormInputWithContext) {
     dataPresent,
     header,
   } = props;
+
+  const [showMessage, setShowMessage] = useState(false);
+
+  useEffect(() => {
+    setShowMessage(true);
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 3000);
+  }, [error, loading, dataPresent]);
 
   if (!isVisible) {
     return (
@@ -38,9 +48,9 @@ export function AddFormWithContext(props: AddFormInputWithContext) {
             metaData={props.metaData}
           />
         </FormContextProvider>
-        {error && <div>Error</div>}
-        {loading && <div>Loading</div>}
-        {dataPresent && (
+        {showMessage && error && <div>Error</div>}
+        {showMessage && loading && <div>Loading</div>}
+        {showMessage && dataPresent && (
           <div>Saved. Click outisde form to exit or continue adding</div>
         )}
       </Modal>

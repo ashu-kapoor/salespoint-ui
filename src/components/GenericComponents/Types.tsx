@@ -32,6 +32,13 @@ export interface FormInputProps {
 export interface UpdateFormProps {
   data?: UpdateFormData;
   metadata?: UpdateFormMetadata[];
+  onSubmit?: FormEventHandler<HTMLFormElement>;
+}
+
+export interface UpdateFormPropsWithContext extends UpdateFormProps {
+  loading: boolean;
+  error?: ApolloError;
+  dataPresent: boolean;
 }
 
 export interface InputState {
@@ -67,7 +74,7 @@ export interface PageContainerProperties {
 }
 
 export interface TableHOFProperties extends PageContainerProperties {
-  searchInput: SearchInventoryInput | SearchCustomerInput | SearchCustomerInput;
+  searchInput: SearchInventoryInput | SearchCustomerInput;
 }
 
 // required non-null key prop

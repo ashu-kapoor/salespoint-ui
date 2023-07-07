@@ -17,7 +17,7 @@ import {
 } from "../GenericComponents/styled-elements/app-styles";
 import AddInventoryForm from "./AddInventoryForm";
 import { useQuery } from "@apollo/client";
-import UpdateForm from "../GenericComponents/UpdateForm";
+import UpdateInventoryForm from "./UpdateInventoryForm";
 
 const testHeaders = [
   { header: "ID", fieldName: "id", width: "20rem" },
@@ -145,8 +145,6 @@ quantity-input-min
 price-select
 price-input-min
       */
-
-    //searchInventory({ variables: { inventoryInput: searchInventoryInput } });
   }
 
   return (
@@ -200,7 +198,7 @@ function InventoryTable(props: TableHOFProperties) {
       metadata={props.metadata}
       headerName={props.headerName}
     >
-      <UpdateForm />
+      <UpdateInventoryForm />
     </Table>
   );
 }

@@ -64,35 +64,4 @@ export default function AddInventoryForm(props: AddFormInput) {
       error={error}
     />
   );
-
-  /* if (!isVisible) {
-    return (
-      <Button
-        enabled={true}
-        type="button"
-        onClick={onClick}
-        style={{ marginTop: "0px" }}
-      >
-        Add
-      </Button>
-    );
-  } else {
-    return (
-      <Modal onClose={onClose}>
-        <ContainerHeader>Add Inventory</ContainerHeader>
-
-        <FormContextProvider>
-          <AddFormWithoutContext
-            onSubmit={handleSubmit}
-            metaData={props.metaData}
-          />
-        </FormContextProvider>
-        {error && <div>Error</div>}
-        {loading && <div>Loading</div>}
-        {data && (
-          <div>Saved. Click outisde form to exit or continue adding</div>
-        )}
-      </Modal>
-    );
-  }*/
 }
