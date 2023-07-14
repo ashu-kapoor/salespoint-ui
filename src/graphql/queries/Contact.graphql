@@ -1,0 +1,32 @@
+query SearchCustomer($searchCustomerInput: SearchCustomerInput!) {
+  searchCustomer(input: $searchCustomerInput) {
+    id
+    firstName
+    lastName
+    email
+    amount
+  }
+}
+
+mutation AddCustomer($input: AddCustomerInput!) {
+  addCustomer(input: $input) {
+    id
+    firstName
+    lastName
+    email
+    amount
+  }
+}
+
+mutation UpdateCustomer(
+  $updateCustomerId: ID!
+  $updateCustomerRequest: AddCustomerInput!
+) {
+  updateCustomer(id: $updateCustomerId, request: $updateCustomerRequest) {
+    id
+    firstName
+    lastName
+    email
+    amount
+  }
+}

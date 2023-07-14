@@ -1,6 +1,6 @@
 import { FormEventHandler, MouseEventHandler, ReactNode } from "react";
-import { JsxElement } from "typescript";
 import {
+  Saga,
   SearchCustomerInput,
   SearchInventoryInput,
 } from "../../generated/graphql";
@@ -15,7 +15,7 @@ export interface UpdateFormMetadata {
   label: string;
   readOnly: boolean;
   validationFunction?: ValidatonFunction;
-  errorMessage?: String;
+  errorMessage?: string;
   slider: boolean;
   freeText: boolean;
 }
@@ -87,14 +87,14 @@ export interface TableProperties extends PageContainerProperties {
     header: string;
     width?: string;
     fieldName: string;
-    renderMethod?: RenderFunction;
+    renderMethod?: RenderFunction<Saga>;
   }[];
   data: TableData[];
   width?: string;
   margin?: string;
 }
 
-export type RenderFunction = (data: number) => JsxElement;
+export type RenderFunction<P> = (data: P) => React.JSX.Element;
 
 export interface TableData {
   [key: string]: any;

@@ -1,0 +1,60 @@
+query SearchSalesForCustomer($searchSalesForCustomerInput: SearchSalesInput!) {
+  searchSales(input: $searchSalesForCustomerInput) {
+    amount
+    id
+    inventory {
+      productName
+      price
+    }
+    quantity
+    status
+    saga {
+      steps {
+        stepStatus
+        stepStage
+        reason
+        channel
+      }
+    }
+  }
+}
+
+query SearchSales($searchSalesInput: SearchSalesInput!) {
+  searchSales(input: $searchSalesInput) {
+    amount
+    customer {
+      id
+      firstName
+      lastName
+      email
+      amount
+    }
+    id
+    inventory {
+      id
+      quantity
+      productName
+      price
+    }
+    quantity
+    status
+    saga {
+      currentChannel
+      currentStep
+      steps {
+        channel
+        stepInfo {
+          FORWARD {
+            command
+          }
+          COMPENSATE {
+            command
+          }
+        }
+        reason
+        stepStage
+        stepStatus
+      }
+    }
+  }
+}

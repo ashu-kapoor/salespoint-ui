@@ -35,7 +35,7 @@ function createFreeText(props: SearchBarInput) {
               : currentValue.datKeyName,
           label:
             previousValue.label.length > 0
-              ? `${previousValue.label},${currentValue.label}`
+              ? `${previousValue.label},${currentValue.label}\n`
               : currentValue.label,
         };
       },
@@ -78,7 +78,7 @@ function SearchFormWithoutState(props: SearchBarInput) {
                     key={`${metadata.datKeyName}-search`}
                     metadata={{
                       ...metadata,
-                      label: `Search ${metadata.label}`,
+                      label: `Free Text Search`,
                     }}
                     data={{ [metadata.datKeyName]: "" }}
                   />

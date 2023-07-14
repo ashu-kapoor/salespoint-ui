@@ -1,82 +1,90 @@
 import { useState } from "react";
 import {
-  SearchInventoryDocument,
-  SearchInventoryInput,
-} from "../../generated/graphql";
-import SearchForm from "../GenericComponents/SearchForm";
-import { Table } from "../GenericComponents/Table";
+  SearchCustomerDocument,
+  SearchCustomerInput,
+} from "../../../generated/graphql";
+import SearchForm from "../../GenericComponents/SearchForm";
+import { Table } from "../../GenericComponents/Table";
 import {
   PageContainerProperties,
   TableData,
   TableHOFProperties,
-} from "../GenericComponents/Types";
+  UpdateFormMetadata,
+} from "../../GenericComponents/Types";
 import {
   DataContainer,
   ContainerHeader,
   Divider,
-} from "../GenericComponents/styled-elements/app-styles";
-import AddInventoryForm from "./AddInventoryForm";
+} from "../../GenericComponents/styled-elements/app-styles";
 import { useQuery } from "@apollo/client";
-import UpdateInventoryForm from "./UpdateInventoryForm";
+import AddCustomerForm from "./AddCustomerForm";
+import UpdateCustomerForm from "./UpdateCustomerForm";
+import { CustomerOrderTable } from "./CustomerOrderTable";
 
-const testHeaders = [
+const headers = [
   { header: "ID", fieldName: "id", width: "20rem" },
   {
-    header: "Product Name",
-    fieldName: "productName",
+    header: "First Name",
+    fieldName: "firstName",
+    width: "10rem",
+  },
+  {
+    header: "Last Name",
+    fieldName: "lastName",
+    width: "10rem",
+  },
+  {
+    header: "Email",
+    fieldName: "email",
     width: "20rem",
   },
-  { header: "Price", fieldName: "price" },
-  { header: "Quantity", fieldName: "quantity" },
+  { header: "Amount", fieldName: "amount" },
+];
+
+const contactOrderMetadata: UpdateFormMetadata[] = [
   {
-    header: "Status",
-    fieldName: "status" /*renderMethod: (data: string)=>{
-    if(data==="low"){
-      return ();
-    }else{
-      return ();
-    }
-  }*/,
+    datKeyName: "id",
+    label: "Id",
+    readOnly: true,
+    slider: false,
+    freeText: false,
+  },
+  {
+    datKeyName: "price",
+    label: "Purchase Price",
+    readOnly: true,
+    slider: false,
+    freeText: false,
+  },
+  {
+    datKeyName: "quantity",
+    label: "Quantity",
+    readOnly: true,
+    slider: false,
+    freeText: false,
+  },
+  {
+    datKeyName: "productName",
+    label: "Product Name",
+    readOnly: true,
+    slider: false,
+    freeText: false,
+  },
+  {
+    datKeyName: "status",
+    label: "Order Status",
+    readOnly: true,
+    slider: false,
+    freeText: false,
   },
 ];
 
-const testData = [
-  {
-    id: 1,
-    productName: "Product 1",
-    price: "24",
-    quantity: "34",
-    status: "low",
-  },
-  {
-    id: 2,
-    productName: "Very Long Super Product name 2",
-    price: "25",
-    quantity: "35",
-    status: "low",
-  },
-  {
-    id: 3,
-    productName: "Product 3",
-    price: "26",
-    quantity: "36",
-    status: "high",
-  },
-  {
-    id: 4,
-    productName: "Product 4",
-    price: "27",
-    quantity: "37",
-    status: "low",
-  },
-];
+export function ContactContainer(props: PageContainerProperties) {
+  let [customerInput, setCustomerInput] = useState<SearchCustomerInput>({});
 
-export function InventoryContainer(props: PageContainerProperties) {
-  let [inventoryInput, setInventoryInput] = useState<SearchInventoryInput>({});
-
-  function inventorySearchHandler(event: React.FormEvent<HTMLFormElement>) {
+  function contactSearchHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    let searchInventoryInput: SearchInventoryInput = {};
+    let searchCustomerInput: SearchCustomerInput = {};
     const elements = Array.from(event.currentTarget.elements).filter(
       (element) => element.id
     );
@@ -128,15 +136,15 @@ export function InventoryContainer(props: PageContainerProperties) {
       });
 
     if (searchTerm) {
-      searchInventoryInput.fields = freeTextFields;
-      searchInventoryInput.searchTerm = searchTerm;
+      searchCustomerInput.fields = freeTextFields;
+      searchCustomerInput.searchTerm = searchTerm;
     }
 
     if (filter !== "") {
-      searchInventoryInput.filter = filter;
+      searchCustomerInput.filter = filter;
     }
 
-    setInventoryInput(searchInventoryInput);
+    setCustomerInput(searchCustomerInput);
 
     /*
       productName-search
@@ -151,16 +159,16 @@ price-input-min
     <DataContainer>
       <ContainerHeader>
         {props.headerName}
-        <AddInventoryForm metaData={props.metadata} />
+        <AddCustomerForm metaData={props.metadata} />
       </ContainerHeader>
       <Divider isThick={true} />
       <SearchForm
         metaData={props.metadata}
-        onSearch={inventorySearchHandler}
+        onSearch={contactSearchHandler}
       ></SearchForm>
       <Divider isThick={true} />
-      <InventoryTable
-        searchInput={inventoryInput}
+      <ContactTable
+        searchInput={customerInput}
         metadata={props.metadata}
         headerName={props.headerName}
       />
@@ -168,9 +176,9 @@ price-input-min
   );
 }
 
-function InventoryTable(props: TableHOFProperties) {
-  const { loading, error, data } = useQuery(SearchInventoryDocument, {
-    variables: { inventoryInput: props.searchInput },
+function ContactTable(props: TableHOFProperties) {
+  const { loading, error, data } = useQuery(SearchCustomerDocument, {
+    variables: { searchCustomerInput: props.searchInput },
   });
 
   if (loading) return <>"Loding"</>;
@@ -178,27 +186,28 @@ function InventoryTable(props: TableHOFProperties) {
 
   let tableData: TableData[] = [];
 
-  data?.searchInventory?.forEach((item) => {
+  data?.searchCustomer?.forEach((item) => {
     tableData.push({
       id: item.id,
-      productName: item.productName,
-      price: item.price,
-      quantity: item.quantity,
-      status: item.quantity < 10 ? "red" : "green",
+      firstName: item.firstName,
+      lastName: item.lastName,
+      email: item.email,
+      amount: item.amount,
     });
   });
 
   return (
     <Table
       //key={props.key}
-      headers={testHeaders}
+      headers={headers}
       //data={testData} Uncomment for local testing
       data={tableData}
       margin={"1rem"}
       metadata={props.metadata}
       headerName={props.headerName}
     >
-      <UpdateInventoryForm />
+      <UpdateCustomerForm />
+      <CustomerOrderTable metadata={contactOrderMetadata} />
     </Table>
   );
 }

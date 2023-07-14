@@ -1,11 +1,11 @@
-import { UpdateFormProps } from "../GenericComponents/Types";
+import { UpdateFormProps } from "../../GenericComponents/Types";
 import { FormEvent } from "react";
 import { useMutation } from "@apollo/client";
 import {
   AddInventoryInput,
   UpdateInventoryDocument,
-} from "../../generated/graphql";
-import UpdateForm from "../GenericComponents/UpdateForm";
+} from "../../../generated/graphql";
+import UpdateForm from "../../GenericComponents/UpdateForm";
 
 export default function UpdateInventoryForm(props: UpdateFormProps) {
   const [updateInventory, { loading, error, data }] = useMutation(

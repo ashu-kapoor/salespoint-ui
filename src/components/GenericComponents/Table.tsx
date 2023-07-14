@@ -6,12 +6,15 @@ import {
   StyledTable,
   TableHeaderRow,
 } from "./styled-elements/table-styles";
-import UpdateForm from "./UpdateForm";
 import { TableProperties, UpdateFormProps } from "./Types";
 import React from "react";
 
 export function Table(
-  tableProps: TableProperties & { children: ReactElement<UpdateFormProps> }
+  tableProps: TableProperties & {
+    children?:
+      | ReactElement<UpdateFormProps>
+      | Array<ReactElement<UpdateFormProps>>;
+  }
 ) {
   const [selected, setSelected] = useState<readonly string[]>([]);
 
@@ -68,7 +71,9 @@ export function Table(
                     key={`${data.id}-${header.fieldName}`}
                     width={header.width}
                   >
-                    {data[header.fieldName]}
+                    {header.renderMethod
+                      ? header.renderMethod(data[header.fieldName])
+                      : data[header.fieldName]}
                   </DataColumn>
                 );
               })}
@@ -76,8 +81,22 @@ export function Table(
 
             {selected?.indexOf(data.id) > -1 &&
               tableProps.metadata &&
+              tableProps.children &&
+              Array.isArray(tableProps.children) &&
+              tableProps.children.map((elem) =>
+                React.cloneElement(elem, {
+                  key: `${data.id}-child1`,
+                  data,
+                  metadata: tableProps.metadata,
+                })
+              )}
+
+            {selected?.indexOf(data.id) > -1 &&
+              tableProps.metadata &&
+              tableProps.children &&
+              !Array.isArray(tableProps.children) &&
               React.cloneElement(tableProps.children, {
-                key: `${data.id}-updateForm`,
+                key: `${data.id}-child2`,
                 data,
                 metadata: tableProps.metadata,
               })}

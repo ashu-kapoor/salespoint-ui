@@ -3,7 +3,7 @@ import {
   ValidatonFunction,
 } from "../components/GenericComponents/Types";
 import AppDrawer from "../components/GenericComponents/AppDrawer";
-import { InventoryContainer } from "../components/PageComponents/InventoryContainer";
+import { InventoryContainer } from "../components/PageComponents/Inventory/InventoryContainer";
 
 const productValidator: ValidatonFunction = (data) => {
   if (data && data.length > 0 && isNaN(+data)) {

@@ -1,43 +1,46 @@
-import { AddFormInput } from "../GenericComponents/Types";
+import { AddFormInput } from "../../GenericComponents/Types";
 import { FormEvent, MouseEvent, useState } from "react";
 import { useMutation } from "@apollo/client";
 import {
-  AddInventoryDocument,
-  AddInventoryInput,
-} from "../../generated/graphql";
-import { AddFormWithContext } from "../GenericComponents/AddFormWithContext";
+  AddCustomerDocument,
+  AddCustomerInput,
+} from "../../../generated/graphql";
+import { AddFormWithContext } from "../../GenericComponents/AddFormWithContext";
 
-export default function AddInventoryForm(props: AddFormInput) {
+export default function AddCustomerForm(props: AddFormInput) {
   const [isVisible, setIsVisible] = useState(false);
-  const [addInventory, { loading, error, data }] =
-    useMutation(AddInventoryDocument);
+  const [addCustomer, { loading, error, data }] =
+    useMutation(AddCustomerDocument);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
 
-    const addInventoryInput: AddInventoryInput = {
-      price: Number(
+    const addCustomerInput: AddCustomerInput = {
+      amount: Number(
         (
           event.currentTarget.elements.namedItem(
-            "price-input"
+            "amount-input"
           ) as HTMLInputElement
         ).value
       ),
-      productName: (
+      firstName: (
         event.currentTarget.elements.namedItem(
-          "productName-input"
+          "firstName-input"
         ) as HTMLInputElement
       ).value,
-      quantity: Number(
-        (
-          event.currentTarget.elements.namedItem(
-            "quantity-input"
-          ) as HTMLInputElement
-        ).value
-      ),
+      lastName: (
+        event.currentTarget.elements.namedItem(
+          "lastName-input"
+        ) as HTMLInputElement
+      ).value,
+      email: (
+        event.currentTarget.elements.namedItem(
+          "email-input"
+        ) as HTMLInputElement
+      ).value,
     };
 
-    addInventory({ variables: { addInventoryInput } });
+    addCustomer({ variables: { input: addCustomerInput } });
   }
 
   function handleFormOpen(event: MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -53,7 +56,7 @@ export default function AddInventoryForm(props: AddFormInput) {
 
   return (
     <AddFormWithContext
-      header={"Add Inventory"}
+      header={"Add Customer"}
       isVisible={isVisible}
       loading={loading}
       onModalOpenClick={handleFormOpen}
