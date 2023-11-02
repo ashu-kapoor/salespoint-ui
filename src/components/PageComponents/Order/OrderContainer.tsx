@@ -11,6 +11,7 @@ import {
   TableData,
   TableHOFProperties,
   TableProperties,
+  UpdateFormMetadata,
 } from "../../GenericComponents/Types";
 import {
   DataContainer,
@@ -20,6 +21,16 @@ import {
 import { useQuery } from "@apollo/client";
 import AddOrderForm from "./AddOrderForm";
 import { SagaButton } from "../../GenericComponents/SagaButton";
+
+const searchFormMetadata: UpdateFormMetadata[] = [
+  {
+    datKeyName: "id",
+    label: "Id",
+    readOnly: true,
+    slider: false,
+    freeText: false,
+  },
+];
 
 const orderHeaders: TableProperties["headers"] = [
   {
@@ -75,60 +86,15 @@ export function OrderContainer(props: PageContainerProperties) {
     );
 
     let freeTextFields: string[] = [];
-    props.metadata
-      .filter((data) => data.freeText)
-      .forEach((data) => freeTextFields.push(data.datKeyName));
 
     const searchTerm = (
       elements.find((elem) => elem.id.endsWith("search")) as HTMLInputElement
     )?.value;
 
-    let filter: string = "";
-
-    props.metadata
-      .filter((data) => data.slider)
-      .forEach((data) => {
-        const selectElement = elements.find(
-          (elem) => elem.id === `${data.datKeyName}-select`
-        )! as HTMLSelectElement;
-        const selectedMin = elements.find(
-          (elem) => elem.id === `${data.datKeyName}-input-min`
-        )! as HTMLInputElement;
-
-        if (selectElement.value !== "default") {
-          if (selectElement.value === "between") {
-            const selectedMax = elements.find(
-              (elem) => elem.id === `${data.datKeyName}-input-max`
-            )! as HTMLInputElement;
-
-            if (selectedMin.value) {
-              filter = filter.concat(
-                `${data.datKeyName}>${selectedMin.value};`
-              );
-            }
-
-            if (selectedMax.value) {
-              filter = filter.concat(
-                `${data.datKeyName}<${selectedMax.value};`
-              );
-            }
-          } else if (selectedMin.value) {
-            filter = filter.concat(
-              `${data.datKeyName}${selectElement.value}${selectedMin.value};`
-            );
-          }
-        }
-      });
-
     if (searchTerm) {
       searchSalesInput.fields = freeTextFields;
       searchSalesInput.searchTerm = searchTerm;
     }
-
-    if (filter !== "") {
-      searchSalesInput.filter = filter;
-    }
-
     setSalesInput(searchSalesInput);
   }
 
@@ -140,7 +106,7 @@ export function OrderContainer(props: PageContainerProperties) {
       </ContainerHeader>
       <Divider isThick={true} />
       <SearchForm
-        metaData={props.metadata}
+        metaData={searchFormMetadata}
         onSearch={salesSearchHandler}
       ></SearchForm>
       <Divider isThick={true} />

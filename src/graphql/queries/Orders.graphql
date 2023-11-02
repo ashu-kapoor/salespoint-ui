@@ -58,3 +58,10 @@ query SearchSales($searchSalesInput: SearchSalesInput!) {
     }
   }
 }
+
+mutation CreateSales($addSalesInput: AddSalesInput!) {
+  createSales(input: $addSalesInput) {
+    id
+    status
+  }
+}

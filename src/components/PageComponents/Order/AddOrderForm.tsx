@@ -1,43 +1,75 @@
 import { AddFormInput } from "../../GenericComponents/Types";
 import { FormEvent, MouseEvent, useState } from "react";
-import { useMutation } from "@apollo/client";
+import {
+  getApolloContext,
+  useApolloClient,
+  useLazyQuery,
+  useMutation,
+} from "@apollo/client";
 import {
   AddInventoryDocument,
   AddInventoryInput,
+  AddSalesInput,
+  CreateSalesDocument,
+  Inventory,
+  SearchInventoryDocument,
 } from "../../../generated/graphql";
 import { AddFormWithContext } from "../../GenericComponents/AddFormWithContext";
+import { AddOrderFormContext } from "./AddOrderFormContext";
 
 export default function AddOrderForm(props: AddFormInput) {
   const [isVisible, setIsVisible] = useState(false);
-  const [addInventory, { loading, error, data }] =
-    useMutation(AddInventoryDocument);
+  const [addSales, { loading, error, data }] = useMutation(CreateSalesDocument);
+  const apolloClient = useApolloClient();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const productId = (
+      event.currentTarget.elements.namedItem(
+        "inventoryId-input"
+      ) as HTMLInputElement
+    ).getAttribute("data-selectedid")!;
 
-    const addInventoryInput: AddInventoryInput = {
-      price: Number(
-        (
-          event.currentTarget.elements.namedItem(
-            "price-input"
-          ) as HTMLInputElement
-        ).value
-      ),
-      productName: (
+    const customerId = (
+      event.currentTarget.elements.namedItem(
+        "customerId-input"
+      ) as HTMLInputElement
+    ).getAttribute("data-selectedid")!;
+
+    const quantity = Number(
+      (
         event.currentTarget.elements.namedItem(
-          "productName-input"
+          "quantity-input"
         ) as HTMLInputElement
-      ).value,
-      quantity: Number(
-        (
-          event.currentTarget.elements.namedItem(
-            "quantity-input"
-          ) as HTMLInputElement
-        ).value
-      ),
+      ).value
+    );
+
+    const response = await apolloClient.query({
+      query: SearchInventoryDocument,
+      variables: {
+        inventoryInput: {
+          fields: ["id"],
+          searchTerm: productId,
+        },
+      },
+    });
+
+    let inventoryData: Inventory | undefined;
+
+    if (response.data) {
+      inventoryData = response.data.searchInventory?.at(0);
+    } else {
+      throw response.error;
+    }
+
+    const addSalesInput: AddSalesInput = {
+      amount: Number(inventoryData!.price),
+      productId,
+      customerId,
+      quantity,
     };
 
-    addInventory({ variables: { addInventoryInput } });
+    addSales({ variables: { addSalesInput } });
   }
 
   function handleFormOpen(event: MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -52,7 +84,7 @@ export default function AddOrderForm(props: AddFormInput) {
   }
 
   return (
-    <AddFormWithContext
+    <AddOrderFormContext
       header={"Place Order"}
       isVisible={isVisible}
       loading={loading}

@@ -1,8 +1,17 @@
-import { FormEventHandler, MouseEventHandler, ReactNode } from "react";
+import {
+  FormEventHandler,
+  MouseEventHandler,
+  ReactNode,
+  MouseEvent,
+  EventHandler,
+  ChangeEventHandler,
+} from "react";
 import {
   Saga,
   SearchCustomerInput,
+  SearchCustomerQuery,
   SearchInventoryInput,
+  SearchInventoryQuery,
 } from "../../generated/graphql";
 import { ApolloError } from "@apollo/client";
 
@@ -29,6 +38,30 @@ export interface FormInputProps {
   dontShowLable?: true;
 }
 
+export interface SuggestiveInputProps {
+  label: string;
+  dataKeyName: string;
+}
+
+export interface SuggestiveInputEventProps extends SuggestiveInputProps {
+  inputValue: string;
+  handleClick: MouseEventHandler<HTMLLIElement>;
+  handleChange: ChangeEventHandler<HTMLInputElement>;
+  loading: boolean;
+  error?: ApolloError;
+  optionData: SuggestiveOptions[];
+  showOptions: boolean;
+  selectedId: string;
+}
+
+export type SuggestiveOptions = { id: string; data: string };
+
+export type SuggestiveInputState = {
+  inputValue: string;
+  selectedId: string;
+  showOptions: boolean;
+};
+
 export interface UpdateFormProps {
   data?: UpdateFormData;
   metadata?: UpdateFormMetadata[];
@@ -44,6 +77,12 @@ export interface UpdateFormPropsWithContext extends UpdateFormProps {
 export interface InputState {
   data: string | number | undefined;
   valid: boolean;
+}
+
+export interface AutoSuggestInputState {
+  activeOption: number;
+  filteretOptions?: string[];
+  data: string | undefined;
 }
 
 export interface SearchBarInput {

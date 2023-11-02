@@ -53,6 +53,7 @@ const inventoryUpdateMetadata: UpdateFormMetadata[] = [
     readOnly: false,
     slider: true,
     freeText: false,
+    validationFunction: amountValidator,
   },
 ];
 
