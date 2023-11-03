@@ -21,6 +21,7 @@ import {
 import { useQuery } from "@apollo/client";
 import AddOrderForm from "./AddOrderForm";
 import { SagaButton } from "../../GenericComponents/SagaButton";
+import UserService from "../../../security/UserService";
 
 const searchFormMetadata: UpdateFormMetadata[] = [
   {
@@ -75,7 +76,7 @@ const orderHeaders: TableProperties["headers"] = [
   },
 ];
 
-export function OrderContainer(props: PageContainerProperties) {
+export function OrderContainer(props: Readonly<PageContainerProperties>) {
   let [salesInput, setSalesInput] = useState<SearchSalesInput>({});
 
   function salesSearchHandler(event: React.FormEvent<HTMLFormElement>) {
@@ -119,9 +120,16 @@ export function OrderContainer(props: PageContainerProperties) {
   );
 }
 
-function OrderTable(props: TableHOFProperties) {
+function OrderTable(props: Readonly<TableHOFProperties>) {
   const { loading, error, data } = useQuery(SearchSalesDocument, {
     variables: { searchSalesInput: props.searchInput },
+    context: {
+      headers: {
+        authorization: UserService.getInstance().getToken()
+          ? `Bearer ${UserService.getInstance().getToken()}`
+          : "",
+      },
+    },
   });
 
   if (loading) return <>"Loding"</>;

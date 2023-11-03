@@ -6,10 +6,20 @@ import {
   UpdateInventoryDocument,
 } from "../../../generated/graphql";
 import UpdateForm from "../../GenericComponents/UpdateForm";
+import UserService from "../../../security/UserService";
 
-export default function UpdateInventoryForm(props: UpdateFormProps) {
+export default function UpdateInventoryForm(props: Readonly<UpdateFormProps>) {
   const [updateInventory, { loading, error, data }] = useMutation(
-    UpdateInventoryDocument
+    UpdateInventoryDocument,
+    {
+      context: {
+        headers: {
+          authorization: UserService.getInstance().getToken()
+            ? `Bearer ${UserService.getInstance().getToken()}`
+            : "",
+        },
+      },
+    }
   );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {

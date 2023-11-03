@@ -20,6 +20,7 @@ import { useQuery } from "@apollo/client";
 import AddCustomerForm from "./AddCustomerForm";
 import UpdateCustomerForm from "./UpdateCustomerForm";
 import { CustomerOrderTable } from "./CustomerOrderTable";
+import UserService from "../../../security/UserService";
 
 const headers = [
   { header: "ID", fieldName: "id", width: "20rem" },
@@ -79,7 +80,7 @@ const contactOrderMetadata: UpdateFormMetadata[] = [
   },
 ];
 
-export function ContactContainer(props: PageContainerProperties) {
+export function ContactContainer(props: Readonly<PageContainerProperties>) {
   let [customerInput, setCustomerInput] = useState<SearchCustomerInput>({});
 
   function contactSearchHandler(event: React.FormEvent<HTMLFormElement>) {
@@ -176,9 +177,17 @@ price-input-min
   );
 }
 
-function ContactTable(props: TableHOFProperties) {
+function ContactTable(props: Readonly<TableHOFProperties>) {
   const { loading, error, data } = useQuery(SearchCustomerDocument, {
     variables: { searchCustomerInput: props.searchInput },
+
+    context: {
+      headers: {
+        authorization: UserService.getInstance().getToken()
+          ? `Bearer ${UserService.getInstance().getToken()}`
+          : "",
+      },
+    },
   });
 
   if (loading) return <>"Loding"</>;

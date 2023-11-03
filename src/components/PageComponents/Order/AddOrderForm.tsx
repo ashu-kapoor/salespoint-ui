@@ -16,10 +16,22 @@ import {
 } from "../../../generated/graphql";
 import { AddFormWithContext } from "../../GenericComponents/AddFormWithContext";
 import { AddOrderFormContext } from "./AddOrderFormContext";
+import UserService from "../../../security/UserService";
 
-export default function AddOrderForm(props: AddFormInput) {
+export default function AddOrderForm(props: Readonly<AddFormInput>) {
   const [isVisible, setIsVisible] = useState(false);
-  const [addSales, { loading, error, data }] = useMutation(CreateSalesDocument);
+  const [addSales, { loading, error, data }] = useMutation(
+    CreateSalesDocument,
+    {
+      context: {
+        headers: {
+          authorization: UserService.getInstance().getToken()
+            ? `Bearer ${UserService.getInstance().getToken()}`
+            : "",
+        },
+      },
+    }
+  );
   const apolloClient = useApolloClient();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -50,6 +62,13 @@ export default function AddOrderForm(props: AddFormInput) {
         inventoryInput: {
           fields: ["id"],
           searchTerm: productId,
+        },
+      },
+      context: {
+        headers: {
+          authorization: UserService.getInstance().getToken()
+            ? `Bearer ${UserService.getInstance().getToken()}`
+            : "",
         },
       },
     });

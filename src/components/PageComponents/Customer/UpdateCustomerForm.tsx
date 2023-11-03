@@ -6,10 +6,20 @@ import {
   UpdateCustomerDocument,
 } from "../../../generated/graphql";
 import UpdateForm from "../../GenericComponents/UpdateForm";
+import UserService from "../../../security/UserService";
 
-export default function UpdateCustomerForm(props: UpdateFormProps) {
+export default function UpdateCustomerForm(props: Readonly<UpdateFormProps>) {
   const [updateCustomer, { loading, error, data }] = useMutation(
-    UpdateCustomerDocument
+    UpdateCustomerDocument,
+    {
+      context: {
+        headers: {
+          authorization: UserService.getInstance().getToken()
+            ? `Bearer ${UserService.getInstance().getToken()}`
+            : "",
+        },
+      },
+    }
   );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {

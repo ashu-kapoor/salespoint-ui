@@ -18,6 +18,7 @@ import {
 import AddInventoryForm from "./AddInventoryForm";
 import { useQuery } from "@apollo/client";
 import UpdateInventoryForm from "./UpdateInventoryForm";
+import UserService from "../../../security/UserService";
 
 const testHeaders = [
   { header: "ID", fieldName: "id", width: "20rem" },
@@ -71,7 +72,7 @@ const testData = [
   },
 ];
 
-export function InventoryContainer(props: PageContainerProperties) {
+export function InventoryContainer(props: Readonly<PageContainerProperties>) {
   let [inventoryInput, setInventoryInput] = useState<SearchInventoryInput>({});
 
   function inventorySearchHandler(event: React.FormEvent<HTMLFormElement>) {
@@ -168,9 +169,16 @@ price-input-min
   );
 }
 
-function InventoryTable(props: TableHOFProperties) {
+function InventoryTable(props: Readonly<TableHOFProperties>) {
   const { loading, error, data } = useQuery(SearchInventoryDocument, {
     variables: { inventoryInput: props.searchInput },
+    context: {
+      headers: {
+        authorization: UserService.getInstance().getToken()
+          ? `Bearer ${UserService.getInstance().getToken()}`
+          : "",
+      },
+    },
   });
 
   if (loading) return <>"Loding"</>;

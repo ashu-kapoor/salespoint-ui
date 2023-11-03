@@ -6,11 +6,22 @@ import {
   AddCustomerInput,
 } from "../../../generated/graphql";
 import { AddFormWithContext } from "../../GenericComponents/AddFormWithContext";
+import UserService from "../../../security/UserService";
 
-export default function AddCustomerForm(props: AddFormInput) {
+export default function AddCustomerForm(props: Readonly<AddFormInput>) {
   const [isVisible, setIsVisible] = useState(false);
-  const [addCustomer, { loading, error, data }] =
-    useMutation(AddCustomerDocument);
+  const [addCustomer, { loading, error, data }] = useMutation(
+    AddCustomerDocument,
+    {
+      context: {
+        headers: {
+          authorization: UserService.getInstance().getToken()
+            ? `Bearer ${UserService.getInstance().getToken()}`
+            : "",
+        },
+      },
+    }
+  );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();

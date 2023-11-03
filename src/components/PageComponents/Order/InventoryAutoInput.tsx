@@ -7,6 +7,7 @@ import {
   SuggestiveInputState,
   SuggestiveOptions,
 } from "../../GenericComponents/Types";
+import UserService from "../../../security/UserService";
 
 export function InventoryAutoInput(props: SuggestiveInputProps) {
   const { dataKeyName, label } = props;
@@ -30,6 +31,13 @@ export function InventoryAutoInput(props: SuggestiveInputProps) {
             inventoryInput: {
               fields: ["productName"],
               searchTerm: inputState.inputValue,
+            },
+          },
+          context: {
+            headers: {
+              authorization: UserService.getInstance().getToken()
+                ? `Bearer ${UserService.getInstance().getToken()}`
+                : "",
             },
           },
         });

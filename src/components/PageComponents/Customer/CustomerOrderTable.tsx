@@ -12,6 +12,7 @@ import {
   Divider,
 } from "../../GenericComponents/styled-elements/app-styles";
 import { SagaButton } from "../../GenericComponents/SagaButton";
+import UserService from "../../../security/UserService";
 
 const testHeaders: TableProperties["headers"] = [
   {
@@ -44,10 +45,17 @@ const testHeaders: TableProperties["headers"] = [
   },
 ];
 
-export function CustomerOrderTable(props: UpdateFormProps) {
+export function CustomerOrderTable(props: Readonly<UpdateFormProps>) {
   const { loading, error, data } = useQuery(SearchSalesDocument, {
     variables: {
       searchSalesInput: {},
+    },
+    context: {
+      headers: {
+        authorization: UserService.getInstance().getToken()
+          ? `Bearer ${UserService.getInstance().getToken()}`
+          : "",
+      },
     },
   });
 
