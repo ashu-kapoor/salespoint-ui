@@ -30,6 +30,7 @@ export default function AddOrderForm(props: Readonly<AddFormInput>) {
             : "",
         },
       },
+      onError: () => {},
     }
   );
   const apolloClient = useApolloClient();

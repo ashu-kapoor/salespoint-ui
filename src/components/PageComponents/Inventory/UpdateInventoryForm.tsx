@@ -19,6 +19,7 @@ export default function UpdateInventoryForm(props: Readonly<UpdateFormProps>) {
             : "",
         },
       },
+      onError: () => {},
     }
   );
 

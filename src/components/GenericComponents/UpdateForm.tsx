@@ -38,7 +38,7 @@ export default function UpdateForm(props: UpdateFormPropsWithContext) {
             background: "#853131",
           }}
         >
-          Error
+          {`Error: ${error.message}`}
         </DataContainer>
       )}
       {showMessage && loading && (

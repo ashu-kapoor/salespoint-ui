@@ -13,6 +13,8 @@ import {
 } from "../../GenericComponents/styled-elements/app-styles";
 import { SagaButton } from "../../GenericComponents/SagaButton";
 import UserService from "../../../security/UserService";
+import LoadingDisplay from "../../GenericComponents/LoadingDisplay";
+import ErrorDisplay from "../../GenericComponents/ErrorDisplay";
 
 const testHeaders: TableProperties["headers"] = [
   {
@@ -59,8 +61,13 @@ export function CustomerOrderTable(props: Readonly<UpdateFormProps>) {
     },
   });
 
-  if (loading) return <>"Loding"</>;
-  if (error) return <>"Error"</>;
+  if (loading) return <LoadingDisplay>Loding..</LoadingDisplay>;
+  if (error)
+    return (
+      <ErrorDisplay>{`${error.message} ${
+        error.cause ? String(error.cause) : ""
+      }`}</ErrorDisplay>
+    );
 
   let tableData: TableData[] = [];
 

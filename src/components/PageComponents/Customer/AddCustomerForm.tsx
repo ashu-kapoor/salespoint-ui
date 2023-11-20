@@ -20,6 +20,7 @@ export default function AddCustomerForm(props: Readonly<AddFormInput>) {
             : "",
         },
       },
+      onError: () => {},
     }
   );
 

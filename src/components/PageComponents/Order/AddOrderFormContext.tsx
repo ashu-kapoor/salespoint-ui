@@ -18,6 +18,7 @@ import {
 import { Modal } from "../../GenericComponents/Modal/Modal";
 import { InventoryAutoInput } from "./InventoryAutoInput";
 import { CustomerAutoInput } from "./CustomerAutoInput";
+import ErrorDisplay from "../../GenericComponents/ErrorDisplay";
 
 export function AddOrderFormContext(props: AddFormInputWithContext) {
   const {
@@ -58,7 +59,7 @@ export function AddOrderFormContext(props: AddFormInputWithContext) {
         <FormContextProvider>
           <OrderForm onSubmit={props.onSubmit} metaData={props.metaData} />
         </FormContextProvider>
-        {showMessage && error && <div>Error</div>}
+        {showMessage && error && <ErrorDisplay>{error.message}</ErrorDisplay>}
         {showMessage && loading && <div>Loading</div>}
         {showMessage && dataPresent && (
           <div>Saved. Click outisde form to exit or continue adding</div>

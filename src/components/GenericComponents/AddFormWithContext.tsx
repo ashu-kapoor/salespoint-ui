@@ -5,6 +5,8 @@ import { Modal } from "./Modal/Modal";
 import { ContainerHeader } from "./styled-elements/app-styles";
 import { Button } from "./styled-elements/forms-styles";
 import { AddFormInputWithContext } from "./Types";
+import ErrorDisplay from "./ErrorDisplay";
+import LoadingDisplay from "./LoadingDisplay";
 
 export function AddFormWithContext(props: AddFormInputWithContext) {
   const {
@@ -48,10 +50,12 @@ export function AddFormWithContext(props: AddFormInputWithContext) {
             metaData={props.metaData}
           />
         </FormContextProvider>
-        {showMessage && error && <div>Error</div>}
-        {showMessage && loading && <div>Loading</div>}
+        {showMessage && error && <ErrorDisplay>{error.message}</ErrorDisplay>}
+        {showMessage && loading && <LoadingDisplay>Loading</LoadingDisplay>}
         {showMessage && dataPresent && (
-          <div>Saved. Click outisde form to exit or continue adding</div>
+          <LoadingDisplay>
+            Saved. Click outisde form to exit or continue adding
+          </LoadingDisplay>
         )}
       </Modal>
     );

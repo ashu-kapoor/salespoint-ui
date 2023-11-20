@@ -22,6 +22,8 @@ import { useQuery } from "@apollo/client";
 import AddOrderForm from "./AddOrderForm";
 import { SagaButton } from "../../GenericComponents/SagaButton";
 import UserService from "../../../security/UserService";
+import LoadingDisplay from "../../GenericComponents/LoadingDisplay";
+import ErrorDisplay from "../../GenericComponents/ErrorDisplay";
 
 const searchFormMetadata: UpdateFormMetadata[] = [
   {
@@ -132,9 +134,16 @@ function OrderTable(props: Readonly<TableHOFProperties>) {
     },
   });
 
-  if (loading) return <>"Loding"</>;
-  if (error) return <>"Error"</>;
+  // if (loading) return <>"Loding"</>;
+  // if (error) return <>"Error"</>;
 
+  if (loading) return <LoadingDisplay>Loading..</LoadingDisplay>;
+  if (error)
+    return (
+      <ErrorDisplay>{`${error.message} ${
+        error.cause ? String(error.cause) : ""
+      }`}</ErrorDisplay>
+    );
   let tableData: TableData[] = [];
 
   data?.searchSales?.forEach((item) => {

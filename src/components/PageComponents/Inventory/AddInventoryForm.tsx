@@ -20,6 +20,7 @@ export default function AddInventoryForm(props: Readonly<AddFormInput>) {
             : "",
         },
       },
+      onError: () => {},
     }
   );
 

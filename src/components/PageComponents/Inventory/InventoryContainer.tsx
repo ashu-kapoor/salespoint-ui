@@ -19,6 +19,8 @@ import AddInventoryForm from "./AddInventoryForm";
 import { useQuery } from "@apollo/client";
 import UpdateInventoryForm from "./UpdateInventoryForm";
 import UserService from "../../../security/UserService";
+import LoadingDisplay from "../../GenericComponents/LoadingDisplay";
+import ErrorDisplay from "../../GenericComponents/ErrorDisplay";
 
 const testHeaders = [
   { header: "ID", fieldName: "id", width: "20rem" },
@@ -181,9 +183,16 @@ function InventoryTable(props: Readonly<TableHOFProperties>) {
     },
   });
 
-  if (loading) return <>"Loding"</>;
-  if (error) return <>"Error"</>;
+  // if (loading) return <>"Loding"</>;
+  // if (error) return <>"Error"</>;
 
+  if (loading) return <LoadingDisplay>Loading..</LoadingDisplay>;
+  if (error)
+    return (
+      <ErrorDisplay>{`${error.message} ${
+        error.cause ? String(error.cause) : ""
+      }`}</ErrorDisplay>
+    );
   let tableData: TableData[] = [];
 
   data?.searchInventory?.forEach((item) => {

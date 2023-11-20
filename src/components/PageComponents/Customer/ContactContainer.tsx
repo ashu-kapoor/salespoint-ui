@@ -21,6 +21,8 @@ import AddCustomerForm from "./AddCustomerForm";
 import UpdateCustomerForm from "./UpdateCustomerForm";
 import { CustomerOrderTable } from "./CustomerOrderTable";
 import UserService from "../../../security/UserService";
+import ErrorDisplay from "../../GenericComponents/ErrorDisplay";
+import LoadingDisplay from "../../GenericComponents/LoadingDisplay";
 
 const headers = [
   { header: "ID", fieldName: "id", width: "20rem" },
@@ -190,8 +192,13 @@ function ContactTable(props: Readonly<TableHOFProperties>) {
     },
   });
 
-  if (loading) return <>"Loding"</>;
-  if (error) return <>"Error"</>;
+  if (loading) return <LoadingDisplay>Loading..</LoadingDisplay>;
+  if (error)
+    return (
+      <ErrorDisplay>{`${error.message} ${
+        error.cause ? String(error.cause) : ""
+      }`}</ErrorDisplay>
+    );
 
   let tableData: TableData[] = [];
 
