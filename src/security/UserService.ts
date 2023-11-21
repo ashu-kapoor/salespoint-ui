@@ -54,11 +54,20 @@ export default class UserService {
     return this.keycloak.tokenParsed?.preferred_username;
   }
 
-  public updateToken(): string {
-    return this.keycloak.tokenParsed?.preferred_username;
+  public updateToken() {
+    this.keycloak.updateToken(60).catch(this.doLogin);
   }
 
   public hasRole(roles: string[]) {
     return roles.some((role) => this.keycloak.hasRealmRole(role));
+  }
+
+  public async getAsyncToken() {
+    if (UserService.getInstance().isLoggedIn()) {
+      this.updateToken();
+    } else {
+      this.doLogin();
+    }
+    return this.getToken();
   }
 }

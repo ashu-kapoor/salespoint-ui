@@ -4,12 +4,12 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { onError } from "@apollo/client/link/error";
+import { setContext } from "@apollo/client/link/context";
 
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  createHttpLink,
   HttpLink,
   ApolloLink,
 } from "@apollo/client";
@@ -19,11 +19,21 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
+const authLink = setContext(async (_, { headers }) => {
+  const token = await UserService.getInstance().getAsyncToken();
+  return {
+    headers: {
+      ...headers,
+      authorization: `Bearer ${token}`,
+    },
+  };
+});
+
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
+  // uri: "http://localhost:4000/graphql",
   cache: new InMemoryCache(),
   link: ApolloLink.from([
-    new HttpLink({ uri: "http://localhost:4000/graphql" }),
+    authLink,
     onError(({ graphQLErrors, networkError }) => {
       if (networkError) {
         console.log(`[Network error]: ${networkError}`);
@@ -37,6 +47,7 @@ const client = new ApolloClient({
         );
       }
     }),
+    new HttpLink({ uri: "http://localhost:4000/graphql" }),
   ]),
 });
 
