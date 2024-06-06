@@ -4,4 +4,4 @@ The application relies o a react ts frontend, raphql/ts backend and myraid of ja
 The application uses, kafka and elastic search to enable it to function and provide certain features.
 
 ## Architecture
-[<img src="Archtecture.jpg">]
+[<img src="Architecture.jpg">]
